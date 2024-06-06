@@ -1,8 +1,7 @@
 #name: qibla_guide_new
 name: qibla
-description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
+description: "Our Qibla Guide app provides accurate Qibla direction wherever you are, ensuring precise alignment during prayers. It offers real-time updates and is your trusted companion for maintaining spiritual connection and devotion"
+
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -22,26 +21,17 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.3.3 <4.0.0'
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   flutter_qiblah: ^3.0.3
-  permission_handler: ^11.3.1
   vibration: ^1.9.0
   flutter_svg: ^2.0.10+1
   geolocator: 11.1.0
-  change_app_package_name: ^1.1.0
+  url_launcher: ^6.2.6
+  google_fonts: ^6.2.1
 
   #  Firebase
   firebase_core: ^2.32.0
@@ -53,28 +43,15 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
-
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
+
   flutter_lints: ^3.0.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter packages.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
   #   - images/a_dot_ham.jpeg
@@ -85,26 +62,14 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  fonts:
-    - family: leagueSpartan
-      fonts:
-        - asset: assets/fonts/LeagueSpartan-VariableFont_wght.ttf
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
+  #  fonts:
+  #    - family: leagueSpartan
+  #      fonts:
+  #        - asset: assets/fonts/LeagueSpartan-VariableFont_wght.ttf
+  #    - family: poppins
+  #      fonts:
+  #        - asset: assets/fonts/Poppins-Regular.ttf
+
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:387041345917:android:5fd9d9cd3529f1dac0cc14",
+        "mobilesdk_app_id": "1:387041345917:android:6b4b71c821dc2938c0cc14",
         "android_client_info": {
-          "package_name": "com.example.qibla_guide_new"
+          "package_name": "com.techlogixit.qibla"
         }
       },
       "oauth_client": [],

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:qibla/screens/qibla_compass.dart';
+import 'package:qibla/utils/loading_screen.dart';
 
 import '../main.dart';
-import '../utils/loading_indicator.dart';
 import '../utils/location_error_widget.dart';
 
 class QiblaScreen extends StatefulWidget {
@@ -15,12 +15,6 @@ class QiblaScreen extends StatefulWidget {
   @override
   State<QiblaScreen> createState() => _QiblaScreenState();
 }
-
-// String qiblahNeedle = 'assets/images/needle.svg';
-// String compass = 'assets/images/compass.svg';
-// Animation<double>? animation;
-// AnimationController? _animationController;
-// double begin = 0.0;
 
 class _QiblaScreenState extends State<QiblaScreen>
     with TickerProviderStateMixin {
@@ -46,7 +40,7 @@ class _QiblaScreenState extends State<QiblaScreen>
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xffe7e7e7),
+      backgroundColor: Colors.grey[50],
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8.0),
@@ -54,7 +48,7 @@ class _QiblaScreenState extends State<QiblaScreen>
           stream: stream,
           builder: (context, AsyncSnapshot<LocationStatus> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoadingIndicator();
+              return const LoadingScreen();
             }
             if (snapshot.data!.enabled == true) {
               switch (snapshot.data!.status) {
@@ -104,86 +98,3 @@ class _QiblaScreenState extends State<QiblaScreen>
     }
   }
 }
-
-// final qiblahDirection = snapshot.data;
-// animation = Tween(
-//   begin: begin,
-//   end: (qiblahDirection!.qiblah * (pi / 180) * -1),
-// ).animate(_animationController!);
-//
-// //UPDATE VALUES
-// begin = (qiblahDirection.qiblah * (pi / 180) * -1);
-// _animationController!.forward(from: 0);
-//
-// return Stack(
-//   // mainAxisAlignment: MainAxisAlignment.center,
-//   children: [
-//     // Container(
-//     //   constraints: const BoxConstraints.expand(),
-//     //   child: Image(
-//     //     image: const AssetImage('assets/images/kaba.jpeg'),
-//     //     fit: BoxFit.cover,
-//     //     opacity: AnimationController(vsync: this, value: 0.8),
-//     //     height: mq.width * .8,
-//     //   ),
-//     // ),
-//     Positioned(
-//       child: Center(
-//         child: SvgPicture.asset(
-//           compass,
-//           semanticsLabel: 'Compass',
-//           height: 250,
-//           width: 50,
-//         ),
-//       ),
-//     ),
-//
-//     Positioned(
-//       top: mq.height * .353,
-//       left: mq.width * .47,
-//       child: SizedBox(
-//         child: AnimatedBuilder(
-//           animation: animation!,
-//           builder: (context, child) => Transform.rotate(
-//             angle: animation!.value,
-//             child: Center(
-//               child: SvgPicture.asset(
-//                 qiblahNeedle,
-//                 semanticsLabel: ' Qibla needle',
-//                 height: 250,
-//                 width: 50,
-//               ),
-//             ),
-//             // Image(
-//             //   image: const AssetImage(
-//             //       'assets/images/qibla_direction.png'),
-//             //   height: mq.height * .5,
-//             //   width: mq.width * .6,
-//             // ),
-//           ),
-//         ),
-//       ),
-//     ),
-//     Positioned(
-//         top: mq.height * .5,
-//         child: ElevatedButton(
-//             onPressed: () async {
-//               Vibration.vibrate(duration: 1000);
-//               // if (await Vibration.hasVibrator() != null) {
-//               //   print('entered');
-//               //   print(' Data $Vibration.hasVibrator()');
-//               //
-//               // }
-//             },
-//             child: const Text('Vibrate')))
-//
-//     // Positioned(
-//     //   bottom: mq.height * .2,
-//     //   left: mq.width * .15,
-//     //   child: Image(
-//     //     image: const AssetImage('assets/images/needle.png'),
-//     //     height: mq.height * .2,
-//     //   ),
-//     // ),
-//   ],
-// );

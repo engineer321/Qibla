@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -13,20 +12,17 @@ import 'package:qibla/utils/loading_indicator.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  // runZonedGuarded<Future<void>>(() async {
-  //
-  // },
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   FirebaseMessaging.instance.getInitialMessage();
   // FirebaseMessaging.instance.sendMessage();
 
-  // var token = await FirebaseMessaging.instance.getToken();
+  var token = await FirebaseMessaging.instance.getToken();
   // print(" Instance Token ID: ${token!}");
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   final fcmToken = await FirebaseMessaging.instance.getToken();
-  log('FCM Token $fcmToken');
+  // log('FCM Token $fcmToken');
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -52,22 +48,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _deviceSupport = FlutterQiblah.androidDeviceSensorSupport();
 
-  // bool hasPermission = false;
-  // Future getPermission() async {
-  //   if (await Permission.location.serviceStatus.isEnabled) {
-  //     var status = await Permission.location.status;
-  //     if (status.isGranted) {
-  //       hasPermission = true;
-  //     } else {
-  //       Permission.location.request().then((value) {
-  //         setState(() {
-  //           hasPermission = (value == PermissionStatus.granted);
-  //         });
-  //       });
-  //     }
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -81,7 +61,6 @@ class _MyAppState extends State<MyApp> {
       home: FutureBuilder(
         future: _deviceSupport,
         builder: (context, AsyncSnapshot<bool?> snapshot) {
-          // print('Data: ${snapshot.data}');
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingIndicator();
           }

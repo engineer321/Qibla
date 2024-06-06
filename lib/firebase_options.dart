@@ -63,7 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '387041345917',
     projectId: 'qibla-guide-91f0b',
     storageBucket: 'qibla-guide-91f0b.appspot.com',
-    iosBundleId: 'com.example.qiblaGuideNew',
+    iosBundleId: 'com.techlogixit.qibla',
   );
-
 }

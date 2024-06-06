@@ -1,17 +1,17 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:qibla/constants/asset_path.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:qibla/services/launch_url.dart';
+import 'package:qibla/utils/loading_screen.dart';
 import 'package:qibla/utils/qibla_locator.dart';
 import 'package:vibration/vibration.dart';
 
 import '../main.dart';
-import '../utils/loading_indicator.dart';
+import '../utils/compass.dart';
 
 class QiblaCompass extends StatefulWidget {
   const QiblaCompass({super.key});
@@ -62,89 +62,111 @@ class _QiblaCompassState extends State<QiblaCompass> {
 
   @override
   Widget build(BuildContext context) {
-    bool isVibrating = false;
-
     void vibrateDevice() async {
       if (await Vibration.hasVibrator() ?? false) {
         Vibration.vibrate(duration: 200);
-        setState(() {
-          isVibrating = true;
-        });
-        Future.delayed(const Duration(microseconds: 200), () {
-          setState(() {
-            isVibrating = false;
-          });
-        });
+
+        Future.delayed(const Duration(milliseconds: 200), () {});
       }
     }
 
     return StreamBuilder(
       stream: FlutterQiblah.qiblahStream,
       builder: (context, AsyncSnapshot<QiblahDirection> snapshot) {
-        // print('snapshot : $snapshot');
-
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingIndicator();
+          return const LoadingScreen();
         }
 
         final qiblahDirection = snapshot.data!;
 
-        //FROM FLUTTER QIBLAH PACKAGE
-        final angle = ((qiblahDirection.qiblah * (pi / 180)) * -1);
+        bool isPointingQibla =
+            qiblahDirection.direction.round() == qiblaDirectionM.round();
 
         // // Check if the direction is within the threshold of the Qibla direction for vibration
-        if (qiblahDirection.direction.round() == qiblaDirectionM.round()) {
+        if (isPointingQibla) {
           vibrateDevice();
         }
 
         return SafeArea(
           child: Column(
             children: [
-              SizedBox(height: mq.height * .02),
-              const Text(
-                'Align the arrow with the Kaaba image for accurate Qibla direction.',
+              SizedBox(height: mq.height * .04),
+              Text(
+                'Align the kaaba icon with the arrow for accurate Qibla direction.',
                 softWrap: true,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                     fontSize: 18,
-                    fontFamily: 'leagueSpartan',
-                    fontWeight: FontWeight.w600),
+                    fontWeight: FontWeight.w300,
+                    letterSpacing: -0.025),
               ),
-              SizedBox(height: mq.height * .06),
+              SizedBox(height: mq.height * .15),
 
               //KAABA IMAGE
-              SvgPicture.asset(
-                AssetPath.kaaba,
-                height: mq.height * .25,
+              // SvgPicture.asset(
+              //   AssetPath.kaaba,
+              //   height: mq.height * .25,
+              // ),
+              SizedBox(
+                child: Icon(
+                  Icons.arrow_upward_outlined,
+                  color:
+                      isPointingQibla ? const Color(0xff16a34a) : Colors.black,
+                  size: mq.height * .05,
+                ),
+              ),
+              Compass(
+                qiblaDirection: qiblahDirection,
               ),
 
               SizedBox(height: mq.height * .05),
 
-              //QIBLA DIRECTION NEEDLE
-              Transform.rotate(
-                angle: angle,
-                alignment: Alignment.center,
-                child: Image.asset(
-                  AssetPath.qiblaDirection,
-                  color: isVibrating ? Colors.green : Colors.black,
-                  height: mq.height * .3,
+              // ElevatedButton(
+              //     onPressed: () => throw Exception(),
+              //     child: const Text('Throw test Exception')),
+
+              // //QIBLA DIRECTION DEGREE OF ANGLE
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: mq.height * .04, vertical: mq.height * .01),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: isPointingQibla
+                      ? const Color(0xff16a34a)
+                      : const Color(0xfff1f5f9),
+                ),
+                child: Text(
+                  "Degree ${qiblahDirection.direction.toStringAsFixed(0)}°",
+                  style: GoogleFonts.poppins(
+                      color: isPointingQibla ? Colors.white : Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
                 ),
               ),
-
-              SizedBox(height: mq.height * .05),
-              ElevatedButton(
-                  onPressed: () => throw Exception(),
-                  child: const Text('Throw test Exception')),
-
-              //QIBLA DIRECTION DEGREE OF ANGLE
-              Text(
-                "Direction : ${qiblahDirection.direction.toStringAsFixed(0)}°",
-                style: const TextStyle(
-                  fontFamily: 'leagueSpartan',
-                  fontSize: 25,
-                  fontWeight: FontWeight.w600,
+              SizedBox(height: mq.height * .10),
+              //Company details
+              InkWell(
+                onTap: Url.launchURL,
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: 'powered by ',
+                          style: GoogleFonts.leagueSpartan(
+                            color: Colors.black,
+                            fontSize: 16,
+                          )),
+                      TextSpan(
+                          text: 'TechlogixIT',
+                          style: GoogleFonts.leagueSpartan(
+                            color: const Color(0xff058CCF),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                          )),
+                    ],
+                  ),
                 ),
-              ),
+              )
             ],
           ),
         );
@@ -152,67 +174,3 @@ class _QiblaCompassState extends State<QiblaCompass> {
     );
   }
 }
-
-// Transform.rotate(
-// angle: (qiblahDirection.qiblah * (pi / 180) * -1),
-// alignment: Alignment.center,
-// child: compassSvg,
-// ),
-// ---------------------
-
-// child: Stack(
-// alignment: Alignment.center,
-// children: [
-// Transform.rotate(
-// angle: (qiblahDirection.direction * (pi / 180) * -1),
-// child: SvgPicture.asset(AssetPath.compassSvg),
-// ),
-// Transform.rotate(
-// angle: (qiblahDirection.qiblah * (pi / 180) * -1),
-// alignment: Alignment.center,
-// child: SvgPicture.asset(
-// AssetPath.kaabaNeedleSvg,
-// height: 300,
-// fit: BoxFit.contain,
-// ),
-// ),
-// Positioned(
-// bottom: mq.height * .03,
-// child: Column(
-// children: [
-// Text(
-// "Direction : ${qiblahDirection.direction.round()}°",
-// style: const TextStyle(
-// fontFamily: 'leagueSpartan',
-// fontSize: 25,
-// fontWeight: FontWeight.w600,
-// ),
-// ),
-// Text(
-// "Offset : ${qiblahDirection.offset.toStringAsFixed(2)}°",
-// style: const TextStyle(
-// fontFamily: 'leagueSpartan',
-// fontSize: 25,
-// fontWeight: FontWeight.w600,
-// ),
-// ),
-// ],
-// ),
-// )
-// ],
-// ),
-
-//-------------
-// Text(
-//   directionText,
-//   style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-// ),
-// Text(
-//   "Offset : ${qiblahDirection.offset.toStringAsFixed(0)}°",
-//   // style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-// ),
-// Transform.rotate(
-//   angle: (qiblahDirection.offset * (pi / 180) * -1),
-//   alignment: Alignment.center,
-//   child: needleSvg,
-// ),
