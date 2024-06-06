@@ -1,4 +1,4 @@
-# qibla_guide_new
+# qibla
 
 A new Flutter project.
 
